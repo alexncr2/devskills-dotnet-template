@@ -1,14 +1,46 @@
-const apiUrl = `${Cypress.env("apiUrl")}`
+const apiUrl = `${Cypress.env("apiUrl")}`;
 
-describe('Backend Test Spec', () => {
+describe("Backend Test Spec", () => {
+  it("should call ping", () => {
+    cy.request({
+      failOnStatusCode: false,
+      method: "GET",
+      url: `${apiUrl}/ping`,
+    }).then((response) => {
+      assert.equal(
+        response.status,
+        200,
+        "The application should respond with 200 on ping request"
+      );
+    });
+  });
 
-    it('should call ping', () => {
-        cy.request({
-            failOnStatusCode: false,
-            method: 'GET',
-            url: `${apiUrl}/ping`,
-        }).then((response) => {
-            expect(response.status).to.eq(200)
-        })
-    })
-})
+  it("should call ping-2", () => {
+    cy.request({
+      failOnStatusCode: false,
+      method: "GET",
+      url: `${apiUrl}/ping-2`,
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body).to.have.property("data", "ping-2");
+    });
+  });
+
+  it("", () => {
+    cy.request(
+      {
+        failOnStatusCode: false,
+        method: "POST",
+        url: `${apiUrl}/ping-2`,
+      },
+      {
+        name: "Jane",
+        age: 18,
+      }
+    ).then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body).to.have.property("name", "Jane");
+      expect(response.body).to.have.property("age", 18);
+    });
+  });
+});
